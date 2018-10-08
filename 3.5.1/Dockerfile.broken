@@ -1,0 +1,98 @@
+FROM ubuntu:bionic-20180821
+
+LABEL maintainer="Mark Coggeshall <mark.coggeshall@csosa.gov>"
+
+USER root
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    software-properties-common \
+    build-essential \
+    ca-certificates \
+    dpkg \
+    curl \
+    locales \
+    pandoc \
+    # MRO dependencies that don't sort themselves out on their own:
+    less \
+    libgomp1 \
+    libpango-1.0-0 \
+    libxt6 \
+    libsm6 && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+WORKDIR /
+# ARG ROOT_CA_1
+# ARG ROOT_CA_2
+# ENV ROOT_CA_1=$ROOT_CA_1 \
+#     ROOT_CA_2=$ROOT_CA_2
+# RUN echo "$ROOT_CA_1" > /usr/local/share/ca-certificates/csosa-DC0633ENTCA02-CA.crt \
+#     echo "$ROOT_CA_2" > /usr/local/share/ca-certificates/DC0633ENTCA02-CA.crt
+# It isn't clear why, but this COPY command does not copy the root certificate
+# files into the image layer. As a result, I must use curl without SSL
+# authentication to download MRO.
+COPY sslcerts /usr/local/share/ca-certificates/
+COPY utils/fix-permissions /usr/local/bin/fix-permissions
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
+    update-ca-certificates
+
+# ENV GPGKEY=E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+# R pre-requisites
+# RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/' && \
+#     gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $GPGKEY && \
+#     gpg -a --export $GPGKEY | apt-key add -
+    # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 && \
+
+# Configure environment
+ENV SHELL=/bin/bash \
+    CT_USER=hugouser \
+    CT_UID=1000 \
+    CT_GID=100 \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    MRO_VERSION=3.5.1
+ENV MRO_URL=https://mran.blob.core.windows.net/install/mro/${MRO_VERSION}/ \
+    MRO_FILE=microsoft-r-open-${MRO_VERSION}.tar.gz \
+    HOME=/home/$CT_USER
+
+RUN useradd -m -s /bin/bash -N -u $CT_UID $CT_USER && \
+    # fix-permissions $HOME && \
+    mkdir ${HOME}/work
+    # mkdir ${HOME}/work && \
+    # fix-permissions ${HOME}/work
+
+WORKDIR ${HOME}
+
+RUN curl -LO --progress-bar --insecure ${MRO_URL}${MRO_FILE} && \
+# RUN curl -LO --progress-bar ${MRO_URL}${MRO_FILE} && \
+    tar -xzf ${MRO_FILE} && \
+    cd microsoft-r-open && ./install.sh -a -u && \
+    cd ../ && rm -rf microsoft-r-open && rm ${MRO_FILE} && \
+    curl -LO --progress-bar --insecure https://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb && \
+    dpkg -i libpng12-0_1.2.54-1ubuntu1_amd64.deb && \
+    rm libpng12-0_1.2.54-1ubuntu1_amd64.deb
+
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends \
+#     pandoc && \
+    # r-base && \
+    # r-base-core && \
+    # r-recommended && \
+    # apt-get clean && \
+    # rm -rf /var/lib/apt/lists/*
+
+# RUN R -e "install.packages(c('blogdown', 'bookdown', 'pkgdown', 'radix'), repos='https://cran.rstudio.com')"
+RUN R -e "install.packages(c('blogdown', 'bookdown', 'pkgdown', 'radix'))"
+RUN R -e "blogdown::install_hugo()"
+
+USER $CT_USER
+
+WORKDIR $HOME/work
+
+# Configure container startup
+CMD ["bash"]
