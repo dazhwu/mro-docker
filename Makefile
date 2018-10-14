@@ -1,7 +1,5 @@
-.PHONY : docker-image docker-clean docker-prune docker-check
-
-docker-image : Dockerfile
-	docker build -t mro .
+include 3.5.1/Makefile
+.PHONY : docker-clean docker-prune docker-check
 
 docker-clean :
 	@echo Removing dangling/untagged images
