@@ -1,6 +1,6 @@
 # A Docker image for Microsoft R Open
 
-[![](https://images.microbadger.com/badges/version/nuest/mro.svg)](https://microbadger.com/images/nuest/mro "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/nuest/mro.svg)](https://microbadger.com/images/nuest/mro "Get your own image badge on microbadger.com") [![Docker Automated build](https://img.shields.io/docker/automated/nuest/mro.svg)](https://hub.docker.com/r/nuest/mro/)
+[![](https://images.microbadger.com/badges/image/blueogive/mro-docker.svg)](https://microbadger.com/images/blueogive/mro-docker "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/blueogive/mro-docker.svg)](https://microbadger.com/images/blueogive/mro-docker "Get your own version badge on microbadger.com")
 
 Microsoft R Open, formerly known as Revolution R Open, is an "enhanced R distribution".
 You can use this Docker container to give MRO a quick try, i.e. without any impact on your local system, or to run MRO in an online Docker infrastructure.
@@ -17,21 +17,21 @@ MRO promises better speed by using special multi-threaded math libraries, replac
 
 **Important**: By running this container you accept the MKL and MRO licenses.
 
-Image metadata can be explored at Microbadger: [https://microbadger.com/images/nuest/mro](https://microbadger.com/images/nuest/mro)
+Image metadata can be explored at Microbadger: [https://microbadger.com/images/blueogive/mro-docker](https://microbadger.com/images/blueogive/mro-docker)
 
 ## Run container
 
 ```bash
-docker run --user docker nuest/mro
+docker run --user docker blueogive/mro-docker
 ```
 
-This downloads the latest build of the image from [Docker Hub](https://hub.docker.com/r/nuest/mro/).
+This downloads the latest build of the image from [Docker Hub](https://hub.docker.com/r/blueogive/mro-docker/).
 In the container, R is automatically started. When you exit R, the container is automatically stopped.
 
-Optionally you can use [tags](https://hub.docker.com/r/nuest/mro/tags/) for specific versions of MRO and execute a demo script:
+Optionally you can use [tags](https://hub.docker.com/r/blueogive/mro-docker/tags/) for specific versions of MRO and execute a demo script:
 
 ```bash
-docker run -it --rm nuest/mro:v3.4.4
+docker run -it --rm blueogive/mro-docker:v3.5.1
 
 # in R
 > source("demo.R")
@@ -40,12 +40,40 @@ docker run -it --rm nuest/mro:v3.4.4
 Alternatively, you can start regular bash (you can skip the `--user docker` if root rights are needed in the container):
 
 ```bash
-docker run -it --user docker mro /bin/bash
+docker run -it --user docker mro-docker /bin/bash
 ```
 
 To work with your own data, simply mount a directory on the host computer to the container, see the [Docker documentation on volumes](https://docs.docker.com/engine/userguide/containers/dockervolumes/).
 
 You can install packages etc. in the R session as usual, though for reproducibility it is strongly recommended to do this _only_ in the Dockerfile.
+
+## 3.5.1
+
+> _Microsoft R Open 3.5.1 is based on R-3.5.1._
+> _The default CRAN mirror has been updated to point to the fixed CRAN repository snapshot from August 01, 2018._ [release notes](https://mran.microsoft.com/news#mro351)
+
+The base image is Ubuntu 18.04.
+See also [MRO 3.5.1 documentation](https://mran.microsoft.com/releases/3.5.1).
+The v3.5.1 image is a bit more elaborate than the others in this repository in
+two main ways:
+1. The Ubuntu Linux OS layers include many of the develop libraries and header
+files that many popular R packages depend upon (e.g., geos, gdal, curl, xml2,
+cairo). This should make it easier successfully install a greater number of
+R packages from within the running image; and
+1. The image includes a selection of [R packages](3.5.1/rpkgs.csv) that are widely
+used including `ggplot2`, `tidyverse`, `data.table`, `rmarkdown`, and `bookdown`.
+The [Hugo](https://gohugo.io/) static site generator is also installed and ready to use.
+
+```bash
+cd 3.5.1
+docker build -t mro-docker:3.5.1 .
+```
+
+Alternatively, you can build the image using GNU Make:
+
+```bash
+make docker-build
+```
 
 ## 3.5.0
 
