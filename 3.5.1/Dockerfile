@@ -119,4 +119,4 @@ LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
 	org.label-schema.schema-version="rc1" \
 	maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
 
-CMD ["xvfb-run", "/usr/bin/R", "--no-save"]
+CMD ["/usr/bin/R", "--no-save"]
