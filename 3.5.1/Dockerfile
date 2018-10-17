@@ -119,7 +119,5 @@ LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
 	org.label-schema.schema-version="rc1" \
 	maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
 
-
-ADD ./docker-entrypoint.sh /
-RUN chmod u+x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY docker-entrypoint.sh docker-entrypoint.sh
+ENTRYPOINT ["/bin/bash", "/docker-entrypoint.sh"]
