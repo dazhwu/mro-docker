@@ -95,10 +95,6 @@ RUN rm microsoft-r-open-*.tar.gz && \
 COPY Renviron.site Renviron.site
 RUN mv Renviron.site /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc
 
-COPY docker-entrypoint.sh docker-entrypoint.sh
-RUN chmod u+x docker-entrypoint.sh && \
-	mv docker-entrypoint.sh /usr/local/bin
-
 COPY rpkgs.csv rpkgs.csv
 COPY Rpkg_install.R Rpkg_install.R
 RUN xvfb-run Rscript Rpkg_install.R && \
@@ -123,4 +119,4 @@ LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
 	org.label-schema.schema-version="rc1" \
 	maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash"]
