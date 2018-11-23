@@ -1,5 +1,8 @@
-include 3.5.1/Makefile
 .PHONY : docker-clean docker-prune docker-check
+
+VCS_URL := $(shell git remote get-url --push gh)
+VCS_REF := $(shell git rev-parse --short HEAD)
+BUILD_DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 docker-clean :
 	@echo Removing dangling/untagged images
@@ -12,3 +15,5 @@ docker-prune :
 docker-check :
 	@echo Computing reclaimable space consumed by Docker artifacts
 	docker system df
+
+include 3.5.1/Makefile

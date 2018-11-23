@@ -1,6 +1,7 @@
 .PHONY : docker-build
 
-docker-build:
+docker-build: 3.5.1/Dockerfile
 	@docker build \
-	--build-arg VCS_REF=`git rev-parse --short HEAD` \
-	--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
+	--build-arg VCS_URL=$(VCS_URL) \
+	--build-arg VCS_REF=$(VCS_REF) \
+	--build-arg BUILD_DATE=$(BUILD_DATE) 3.5.1/
