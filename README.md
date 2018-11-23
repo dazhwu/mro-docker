@@ -9,7 +9,7 @@ Homepage: https://mran.microsoft.com/open
 
 For plain R Docker images see [Rocker](https://github.com/rocker-org/rocker). The Rocker images were a great help in creating the MRO images.
 
-> _MRO focusses on speed and reproducibility._
+> _MRO focuses on speed and reproducibility._
 
 By default, packages are not installed from main CRAN, but from a CRAN repository snapshot.
 For more information see https://mran.microsoft.com/documents/rro/reproducibility.
@@ -22,7 +22,7 @@ Image metadata can be explored at Microbadger: [https://microbadger.com/images/b
 ## Run container
 
 ```bash
-docker run --user docker blueogive/mro-docker
+docker run --user docker blueogive/mro-docker:latest
 ```
 
 This downloads the latest build of the image from [Docker Hub](https://hub.docker.com/r/blueogive/mro-docker/).
@@ -32,18 +32,37 @@ Optionally you can use [tags](https://hub.docker.com/r/blueogive/mro-docker/tags
 
 ```bash
 docker run -it --rm blueogive/mro-docker:v3.5.1
-
-# in R
-> source("demo.R")
 ```
 
-Alternatively, you can start regular bash (you can skip the `--user docker` if root rights are needed in the container):
+Once the container starts, you will be at a bash prompt inside it. To run the `demo.R`
+script, which executes some benchmarking code, you do this:
 
 ```bash
-docker run -it --user docker mro-docker /bin/bash
+R
+source("demo.R")
+```
+or this:
+
+```bash
+Rscript demo.R
 ```
 
-To work with your own data, simply mount a directory on the host computer to the container, see the [Docker documentation on volumes](https://docs.docker.com/engine/userguide/containers/dockervolumes/).
+To exit the running container, return to the `bash` prompt and type:
+
+```bash
+exit
+```
+
+To get exit an interactive `R` session and return tot he `bash` prompt, type:
+```R
+q()
+```
+
+To work with your own data, simply mount a directory on the host computer to the container, see the [Docker documentation on volumes](https://docs.docker.com/engine/userguide/containers/dockervolumes/):
+
+```bash
+docker run -it --rm -v path/to/my/data:/home/docker/work/data -v /path/to/my/source_code:/home/docker/work blueogive/mro-docker:v3.5.1
+```
 
 You can install packages etc. in the R session as usual, though for reproducibility it is strongly recommended to do this _only_ in the Dockerfile.
 
