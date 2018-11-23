@@ -74,7 +74,7 @@ RUN useradd ${CT_USER} \
 	&& chown ${CT_USER}:${CT_USER} ${HOME} \
 	&& addgroup ${CT_USER} staff
 
-ENV MRO_VERSION $MRO_VERSION_MAJOR.$MRO_VERSION_MINOR.$MRO_VERSION_BUGFIX
+ENV MRO_VERSION=${MRO_VERSION_MAJOR}.${MRO_VERSION_MINOR}.${MRO_VERSION_BUGFIX}
 
 WORKDIR ${HOME}
 
@@ -99,10 +99,10 @@ COPY rpkgs.csv rpkgs.csv
 COPY Rpkg_install.R Rpkg_install.R
 RUN xvfb-run Rscript Rpkg_install.R && \
 	rm rpkgs.csv Rpkg_install.R
-RUN R -e "devtools::install_bitbucket('blueogive/reporeter')"
 
 USER ${CT_USER}
-RUN mkdir -p ${HOME}/work
+RUN mkdir -p ${HOME}/work ${HOME}/R/lib
+ENV R_LIBS_USER=${HOME}/R/lib
 WORKDIR ${HOME}/work
 
 # Add demo script
