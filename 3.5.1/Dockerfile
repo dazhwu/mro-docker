@@ -108,15 +108,18 @@ WORKDIR ${HOME}/work
 # Add demo script
 COPY demo.R demo.R
 
+ARG VCS_URL=${VCS_URL}
+ARG VCS_REF=${VCS_REF}
+ARG BUILD_DATE=${BUILD_DATE}
+
 # Add image metadata
 LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
     org.label-schema.vendor="Microsoft Corporation, Dockerfile provided by Mark Coggeshall, forked from nuest/mro-docker" \
 	org.label-schema.name="Microsoft R Open" \
 	org.label-schema.description="Docker images of Microsoft R Open (MRO) with the Intel® Math Kernel Libraries (MKL)." \
-	org.label-schema.vcs-url=$VCS_URL \
-	org.label-schema.vcs-ref=$VCS_REF \
-	org.label-schema.build-date=$BUILD_DATE \
-	org.label-schema.schema-version="rc1" \
+	org.label-schema.vcs-url=${VCS_URL} \
+	org.label-schema.vcs-ref=${VCS_REF} \
+	org.label-schema.build-date=${BUILD_DATE} \
 	maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
 
 ENTRYPOINT ["/bin/bash"]
