@@ -122,4 +122,4 @@ LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
 	org.label-schema.build-date=${BUILD_DATE} \
 	maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash", "-l", "-c"]
