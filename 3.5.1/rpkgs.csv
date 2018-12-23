@@ -17,6 +17,7 @@
 "radix"
 "RColorBrewer"
 "Rcpp"
+"remotes"
 "reticulate"
 "rmarkdown"
 "scales"
