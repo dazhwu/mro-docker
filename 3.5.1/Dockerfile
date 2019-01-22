@@ -57,7 +57,7 @@ ENV LC_ALL=en_US.UTF-8 \
 	MRO_VERSION_BUGFIX=1 \
 	SHELL=/bin/bash \
     CT_USER=docker \
-    CT_UID=1000 \
+    CT_UID=1001 \
     CT_GID=100
 ENV HOME=/home/${CT_USER}
 
