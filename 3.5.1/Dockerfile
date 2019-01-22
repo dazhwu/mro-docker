@@ -23,6 +23,7 @@ RUN apt-get update \
 		gosu \
 		default-jdk \
 		locales \
+		make \
 		curl \
 		dpkg \
 		pandoc \
