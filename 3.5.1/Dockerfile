@@ -20,6 +20,7 @@ RUN apt-get update \
 		ca-certificates \
 		build-essential \
 		gfortran \
+		gosu \
 		default-jdk \
 		locales \
 		curl \
@@ -122,4 +123,6 @@ LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
 	org.label-schema.build-date=${BUILD_DATE} \
 	maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
 
-ENTRYPOINT ["/bin/bash", "-l", "-c"]
+USER root
+
+ENTRYPOINT ["/bin/bash"]
