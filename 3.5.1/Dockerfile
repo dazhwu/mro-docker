@@ -47,6 +47,9 @@ RUN apt-get update \
 		libpango-1.0-0 \
 		libxt6 \
 		libsm6 \
+		# Packages required to install MSSQL CLI tools
+		apt-transport-https \
+		debconf-utils \
 	&& rm -rf /var/lib/apt/lists/*
 
 ## Set environment variables
@@ -102,8 +105,19 @@ COPY Rpkg_install.R Rpkg_install.R
 RUN xvfb-run Rscript Rpkg_install.R && \
 	rm rpkgs.csv Rpkg_install.R
 
+# Add Microsoft repository and SQL Server commandline tools
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+	curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > \
+	/etc/apt/sources.list.d/mssql-release.list && \
+	apt-get update && \
+	ACCEPT_EULA=Y apt-get install -y msodbcsql mssql-tools && \
+	echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc && \
+	/bin/bash -c "source ~/.bashrc"
+
 USER ${CT_USER}
-RUN mkdir -p ${HOME}/work ${HOME}/R/lib
+RUN mkdir -p ${HOME}/work ${HOME}/R/lib && \
+	echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc && \
+	/bin/bash -c "source ~/.bashrc"
 ENV R_LIBS_USER=${HOME}/R/lib
 WORKDIR ${HOME}/work
 
