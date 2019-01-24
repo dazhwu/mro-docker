@@ -59,7 +59,8 @@ ENV LC_ALL=en_US.UTF-8 \
 	SHELL=/bin/bash \
     CT_USER=docker \
     CT_UID=1001 \
-    CT_GID=100
+    CT_GID=100 \
+	CT_FMODE=0775
 ENV HOME=/home/${CT_USER}
 
 ## Setup the locale
@@ -71,9 +72,9 @@ RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
 ## Set a default user. Available via runtime flag `--user docker`
 ## Add user to 'staff' group, granting them write privileges to /usr/local/lib/R/site.library
 ## User should also have & own a home directory (e.g. for linked volumes to work properly).
-RUN useradd ${CT_USER} \
-	&& mkdir ${HOME} \
-	&& chown ${CT_USER}:${CT_USER} ${HOME} \
+RUN useradd ${CT_USER} --uid ${CT_UID} --gid ${CT_GID} \
+	&& mkdir --mode ${CT_FMODE} ${HOME} \
+	&& chown ${CT_USER}:${CT_GID} ${HOME} \
 	&& addgroup ${CT_USER} staff
 
 ENV MRO_VERSION=${MRO_VERSION_MAJOR}.${MRO_VERSION_MINOR}.${MRO_VERSION_BUGFIX}
@@ -103,7 +104,7 @@ RUN xvfb-run Rscript Rpkg_install.R && \
 	rm rpkgs.csv Rpkg_install.R
 
 USER ${CT_USER}
-RUN mkdir -p ${HOME}/work ${HOME}/R/lib
+RUN mkdir -p --mode ${CT_FMODE} ${HOME}/work ${HOME}/R/lib
 ENV R_LIBS_USER=${HOME}/R/lib
 WORKDIR ${HOME}/work
 
