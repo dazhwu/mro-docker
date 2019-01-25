@@ -58,7 +58,7 @@ ENV LC_ALL=en_US.UTF-8 \
 	MRO_VERSION_BUGFIX=1 \
 	SHELL=/bin/bash \
     CT_USER=docker \
-    CT_UID=1001 \
+    CT_UID=1000 \
     CT_GID=100 \
 	CT_FMODE=0775
 ENV HOME=/home/${CT_USER}
@@ -81,7 +81,7 @@ ENV MRO_VERSION=${MRO_VERSION_MAJOR}.${MRO_VERSION_MINOR}.${MRO_VERSION_BUGFIX}
 
 WORKDIR ${HOME}
 
-## Donwload and install MRO & MKL
+## Download and install MRO & MKL
 RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/${MRO_VERSION}/microsoft-r-open-${MRO_VERSION}.tar.gz \
 	&& tar -xzf microsoft-r-open-${MRO_VERSION}.tar.gz
 WORKDIR ${HOME}/microsoft-r-open
