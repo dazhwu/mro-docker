@@ -48,7 +48,7 @@ RUN apt-get update \
 		libpango-1.0-0 \
 		libxt6 \
 		libsm6 \
-	&& rm -rf /var/lib/apt/lists/*
+	&& apt-get clean
 
 ## Set environment variables
 ENV LC_ALL=en_US.UTF-8 \
