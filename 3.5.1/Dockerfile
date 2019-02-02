@@ -20,6 +20,7 @@ RUN apt-get update \
 		ca-certificates \
 		build-essential \
 		gfortran \
+		git \
 		gosu \
 		default-jdk \
 		locales \
