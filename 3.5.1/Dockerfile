@@ -19,6 +19,7 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		ca-certificates \
 		build-essential \
+		fonts-texgyre \
 		gfortran \
 		git \
 		gosu \
@@ -63,13 +64,24 @@ ENV LC_ALL=en_US.UTF-8 \
     CT_USER=docker \
     CT_UID=1000 \
     CT_GID=100 \
-	CT_FMODE=0775
+	CT_FMODE=0775 \
+	FONT_LOCAL=/usr/local/share/fonts
 ENV HOME=/home/${CT_USER}
 
+COPY fonts.zip ${FONT_LOCAL}
+
+WORKDIR ${FONT_LOCAL}
+
 ## Setup the locale
-RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+RUN unzip fonts.zip \
+	&& rm fonts.zip \
+	&& echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
 	&& locale-gen en_US.utf8 \
-	&& /usr/sbin/update-locale LANG=en_US.UTF-8
+	&& /usr/sbin/update-locale LANG=en_US.UTF-8 \
+	&& git clone --branch release --depth 1 \
+	'https://github.com/adobe-fonts/source-code-pro.git' \
+	"${FONT_LOCAL}/adobe-fonts/source-code-pro" \
+	&& fc-cache -f -v "${FONT_LOCAL}"
 
 ## (Based on https://github.com/rocker-org/rocker/blob/master/r-base/Dockerfile)
 ## Set a default user. Available via runtime flag `--user docker`
