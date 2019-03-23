@@ -10,7 +10,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-FROM ubuntu:bionic-20190122
+FROM ubuntu:bionic-20190307
 
 USER root
 
@@ -28,6 +28,7 @@ RUN apt-get update \
 		curl \
 		dpkg \
 		pandoc \
+		pandoc-citeproc \
 		# Linux system packages that are dependencies of R packages
 		libxml2-dev \
 		libcurl4-gnutls-dev \
@@ -38,6 +39,7 @@ RUN apt-get update \
 		libcairo2-dev \
 		libssl-dev \
 		unzip \
+		wget \
 		# Allow R pkgs requiring X11 to install/run using virtual framebuffer
 		xvfb \
 		xauth \
