@@ -22,6 +22,7 @@ RUN apt-get update \
 		fonts-texgyre \
 		gfortran \
 		git \
+		gnupg2 \
 		gosu \
 		default-jdk \
 		locales \
@@ -53,10 +54,23 @@ RUN apt-get update \
 		libsm6 \
 	&& apt-get clean
 
+## Install Microsoft ODBC driver and SQL commandline tools
+RUN curl -o microsoft.asc https://packages.microsoft.com/keys/microsoft.asc \
+    && apt-key add microsoft.asc \
+    && rm microsoft.asc \
+    && curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
+        msodbcsql17 \
+        mssql-tools \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 ## Set environment variables
 ENV LC_ALL=en_US.UTF-8 \
 	LANG=en_US.UTF-8 \
 	LANGUAGE=en_US.UTF-8 \
+    PATH=/opt/mssql-tools/bin:${PATH} \
 	MRO_VERSION_MAJOR=3 \
 	MRO_VERSION_MINOR=5 \
 	MRO_VERSION_BUGFIX=1 \
