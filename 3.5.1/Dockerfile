@@ -39,7 +39,7 @@ RUN apt-get update \
 		libgeos-dev \
 		libproj-dev \
 		libcairo2-dev \
-		libssl-dev \
+        libssl1.0-dev \
 		unzip \
 		wget \
 		# Allow R pkgs requiring X11 to install/run using virtual framebuffer
