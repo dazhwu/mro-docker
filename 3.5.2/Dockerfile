@@ -111,7 +111,7 @@ ENV MRO_VERSION=${MRO_VERSION_MAJOR}.${MRO_VERSION_MINOR}.${MRO_VERSION_BUGFIX}
 WORKDIR ${HOME}
 
 ## Download and install MRO & MKL
-RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/${MRO_VERSION}/microsoft-r-open-${MRO_VERSION}.tar.gz \
+RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/${MRO_VERSION}/ubuntu/microsoft-r-open-${MRO_VERSION}.tar.gz \
 	&& tar -xzf microsoft-r-open-${MRO_VERSION}.tar.gz
 WORKDIR ${HOME}/microsoft-r-open
 RUN ./install.sh -a -u
