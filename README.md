@@ -26,12 +26,11 @@ docker run --user docker blueogive/mro-docker:latest
 ```
 
 This downloads the latest build of the image from [Docker Hub](https://hub.docker.com/r/blueogive/mro-docker/).
-In the container, R is automatically started. When you exit R, the container is automatically stopped.
 
 Optionally you can use [tags](https://hub.docker.com/r/blueogive/mro-docker/tags/) for specific versions of MRO and execute a demo script:
 
 ```bash
-docker run -it --rm blueogive/mro-docker:v3.5.1
+docker run -it --rm blueogive/mro-docker:v3.5.2
 ```
 
 Once the container starts, you will be at a bash prompt inside it. To run the `demo.R`
@@ -61,10 +60,42 @@ q()
 To work with your own data, simply mount a directory on the host computer to the container, see the [Docker documentation on volumes](https://docs.docker.com/engine/userguide/containers/dockervolumes/):
 
 ```bash
-docker run -it --rm -v path/to/my/data:/home/docker/work/data -v /path/to/my/source_code:/home/docker/work blueogive/mro-docker:v3.5.1
+docker run -it --rm -v path/to/my/data:/home/docker/work/data -v /path/to/my/source_code:/home/docker/work blueogive/mro-docker:v3.5.2
 ```
 
 You can install packages etc. in the R session as usual, though for reproducibility it is strongly recommended to do this _only_ in the Dockerfile.
+
+## 3.5.2
+
+> _Microsoft R Open 3.5.2 is based on R-3.5.2._
+> _The default CRAN mirror has been updated to point to the fixed CRAN repository snapshot from February 01, 2019._ [release notes](https://mran.microsoft.com/news#mro352)
+
+The base image is Ubuntu 18.04.
+See also [MRO 3.5.2 documentation](https://mran.microsoft.com/releases/3.5.2).
+The v3.5.2 image is similar to the v3.5.1 image but otherwise more elaborate
+than the others in this repository:
+
+1. The Ubuntu Linux OS layers include many of the develop libraries and header
+files that many popular R packages depend upon (e.g., geos, gdal, curl, xml2,
+cairo). This should make it easier successfully install a greater number of
+R packages from within the running image;
+1. The image includes a selection of [R packages](3.5.2/rpkgs.csv) that are widely
+used including `ggplot2`, `tidyverse`, `data.table`, `rmarkdown`, and `bookdown`;
+1. The `pacman` package is included to allow users to load or install and load
+packages; and the `radix` package (since renamed `distill`) for authoring
+scientific documents in Markdown; and
+2. The [Hugo](https://gohugo.io/) static site generator is also installed and ready to use.
+
+```bash
+cd 3.5.2
+docker build -t mro-docker:3.5.2 .
+```
+
+Alternatively, you can build the image using GNU Make:
+
+```bash
+make build-3.5.2
+```
 
 ## 3.5.1
 
@@ -91,7 +122,7 @@ docker build -t mro-docker:3.5.1 .
 Alternatively, you can build the image using GNU Make:
 
 ```bash
-make docker-build
+make build-3.5.1
 ```
 
 ## 3.5.0

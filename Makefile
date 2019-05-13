@@ -14,3 +14,4 @@ docker-check :
 	docker system df
 
 include 3.5.1/Makefile
+include 3.5.2/Makefile
