@@ -129,8 +129,10 @@ RUN mv Renviron.site /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc
 
 COPY rpkgs.csv rpkgs.csv
 COPY Rpkg_install.R Rpkg_install.R
-RUN xvfb-run Rscript Rpkg_install.R && \
-	rm rpkgs.csv Rpkg_install.R
+RUN mkdir -p --mode ${CT_FMODE} ${HOME}/.checkpoint && \
+	xvfb-run Rscript Rpkg_install.R && \
+	rm rpkgs.csv Rpkg_install.R && \
+	chown -R ${CT_UID}:${CT_GID} ${HOME}/.checkpoint
 
 USER ${CT_USER}
 RUN mkdir -p --mode ${CT_FMODE} ${HOME}/work ${HOME}/R/lib
