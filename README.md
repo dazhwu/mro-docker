@@ -30,7 +30,7 @@ This downloads the latest build of the image from [Docker Hub](https://hub.docke
 Optionally you can use [tags](https://hub.docker.com/r/blueogive/mro-docker/tags/) for specific versions of MRO and execute a demo script:
 
 ```bash
-docker run -it --rm blueogive/mro-docker:v3.5.2
+docker run -it --rm blueogive/mro-docker:v3.5.3
 ```
 
 Once the container starts, you will be at a bash prompt inside it. To run the `demo.R`
@@ -60,10 +60,30 @@ q()
 To work with your own data, simply mount a directory on the host computer to the container, see the [Docker documentation on volumes](https://docs.docker.com/engine/userguide/containers/dockervolumes/):
 
 ```bash
-docker run -it --rm -v path/to/my/data:/home/docker/work/data -v /path/to/my/source_code:/home/docker/work blueogive/mro-docker:v3.5.2
+docker run -it --rm -v path/to/my/data:/home/docker/work/data -v /path/to/my/source_code:/home/docker/work blueogive/mro-docker:v3.5.3
 ```
 
 You can install packages etc. in the R session as usual, though for reproducibility it is strongly recommended to do this _only_ in the Dockerfile.
+
+## 3.5.3
+
+> _Microsoft R Open 3.5.3 is based on R-3.5.3._
+> _The default CRAN mirror has been updated to point to the fixed CRAN repository snapshot from April 15, 2019._ [release notes](https://mran.microsoft.com/news#mro353)
+
+The base image is Ubuntu 18.04.
+See also [MRO 3.5.3 documentation](https://mran.microsoft.com/releases/3.5.3).
+The v3.5.3 image is similar to the v3.5.2 and v3.5.1 images.
+
+```bash
+cd 3.5.3
+docker build -t mro-docker:3.5.3 .
+```
+
+Alternatively, you can build the image using GNU Make:
+
+```bash
+make build-3.5.3
+```
 
 ## 3.5.2
 
@@ -72,7 +92,7 @@ You can install packages etc. in the R session as usual, though for reproducibil
 
 The base image is Ubuntu 18.04.
 See also [MRO 3.5.2 documentation](https://mran.microsoft.com/releases/3.5.2).
-The v3.5.2 image is similar to the v3.5.1 image but otherwise more elaborate
+The v3.5.2 image is similar to the v3.5.1 image but is otherwise more elaborate
 than the others in this repository:
 
 1. The Ubuntu Linux OS layers include many of the develop libraries and header

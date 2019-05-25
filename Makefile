@@ -15,3 +15,4 @@ docker-check :
 
 include 3.5.1/Makefile
 include 3.5.2/Makefile
+include 3.5.3/Makefile
