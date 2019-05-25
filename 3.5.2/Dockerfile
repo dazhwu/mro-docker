@@ -10,7 +10,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-FROM ubuntu:bionic-20190424
+FROM ubuntu:bionic-20190515
 
 USER root
 
