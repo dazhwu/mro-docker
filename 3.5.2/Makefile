@@ -6,6 +6,7 @@ build-3.5.2: 3.5.2/Dockerfile
 	--build-arg VCS_REF=$(VCS_REF) \
 	--build-arg BUILD_DATE=$(BUILD_DATE) \
 	--tag blueogive/mro-docker:v3.5.2 \
+	--tag blueogive/mro-docker:$(TAG_DATE) \
 	--tag blueogive/mro-docker:latest 3.5.2/
 
 push-3.5.2 : build-3.5.2
