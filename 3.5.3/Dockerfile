@@ -135,7 +135,6 @@ RUN mkdir -p --mode ${CT_FMODE} ${HOME}/.checkpoint && \
     chown -R ${CT_UID}:${CT_GID} ${HOME}/.checkpoint && \
     chown -R ${CT_USER}:${CT_GID} ${HOME}/bin && \
     chown -R ${CT_USER}:${CT_GID} ${HOME}/.TinyTeX && \
-    chown -R ${CT_USER}:${CT_GID} ${HOME}/work && \
     rm ${HOME}/.wget-hsts
 
 USER ${CT_USER}
