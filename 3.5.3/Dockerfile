@@ -132,7 +132,11 @@ COPY Rpkg_install.R Rpkg_install.R
 RUN mkdir -p --mode ${CT_FMODE} ${HOME}/.checkpoint && \
 	xvfb-run Rscript Rpkg_install.R && \
 	rm rpkgs.csv Rpkg_install.R && \
-	chown -R ${CT_UID}:${CT_GID} ${HOME}/.checkpoint
+	chown -R ${CT_UID}:${CT_GID} ${HOME}/.checkpoint && \
+    chown -R ${CT_USER}:${CT_GID} ${HOME}/bin && \
+    chown -R ${CT_USER}:${CT_GID} ${HOME}/.TinyTeX && \
+    chown -R ${CT_USER}:${CT_GID} ${HOME}/work && \
+    rm ${HOME}/.wget-hsts
 
 USER ${CT_USER}
 RUN mkdir -p --mode ${CT_FMODE} ${HOME}/work ${HOME}/R/lib
