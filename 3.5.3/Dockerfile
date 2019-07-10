@@ -95,9 +95,9 @@ RUN unzip fonts.zip \
     && git clone --branch release --depth 1 \
     'https://github.com/adobe-fonts/source-code-pro.git' \
     "${FONT_LOCAL}/adobe-fonts/source-code-pro" \
-	# XeTeX gets hung up by these WOFF files, if they are present.
-	# Looks like a bug.
-	&& rm -rf ${FONT_LOCAL}/adobe-fonts/source-code-pro/WOFF \
+    # XeTeX gets hung up by these WOFF files, if they are present.
+    # Looks like a bug.
+    && rm -rf ${FONT_LOCAL}/adobe-fonts/source-code-pro/WOFF \
     && fc-cache -f -v "${FONT_LOCAL}"
 
 ## (Based on https://github.com/rocker-org/rocker/blob/master/r-base/Dockerfile)
