@@ -15,13 +15,18 @@ FROM ubuntu:bionic-20190515
 USER root
 
 ## Install some useful tools and dependencies for MRO
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get -y update  \
+    && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         ca-certificates \
         build-essential \
         fonts-texgyre \
+        make \
+        g++ \
         gfortran \
+        libncurses5-dev \
+		libncursesw5-dev \
         git \
+        tcl \
         gnupg2 \
         gosu \
         default-jdk \
@@ -35,7 +40,7 @@ RUN apt-get update \
         libxml2-dev \
         libcurl4-gnutls-dev \
         liblapack-dev \
-        libgdal-dev \
+        #libgdal-dev \
         libgeos-dev \
         libproj-dev \
         libcairo2-dev \
@@ -52,7 +57,9 @@ RUN apt-get update \
         libpango-1.0-0 \
         libxt6 \
         libsm6 \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 
 ## Install Microsoft ODBC driver and SQL commandline tools
 RUN curl -o microsoft.asc https://packages.microsoft.com/keys/microsoft.asc \
@@ -138,7 +145,10 @@ RUN mkdir -p --mode ${CT_FMODE} ${HOME}/.checkpoint && \
     chown -R ${CT_UID}:${CT_GID} ${HOME}/.checkpoint && \
     chown -R ${CT_USER}:${CT_GID} ${HOME}/bin && \
     chown -R ${CT_USER}:${CT_GID} ${HOME}/.TinyTeX && \
-    rm ${HOME}/.wget-hsts
+    rm ${HOME}/.wget-hsts \
+    && rm -rf /tmp/* \
+    && apt-get autoclean -y \
+     && rm -rf /var/lib/apt/lists/*
 
 USER ${CT_USER}
 RUN mkdir -p --mode ${CT_FMODE} ${HOME}/work ${HOME}/R/lib
@@ -159,8 +169,7 @@ LABEL org.label-schema.license="https://mran.microsoft.com/faq/#licensing" \
     org.label-schema.description="Docker images of Microsoft R Open (MRO) with the Intel® Math Kernel Libraries (MKL)." \
     org.label-schema.vcs-url=${VCS_URL} \
     org.label-schema.vcs-ref=${VCS_REF} \
-    org.label-schema.build-date=${BUILD_DATE} \
-    maintainer="Mark Coggeshall <mark.coggeshall@gmail.com>"
+    org.label-schema.build-date=${BUILD_DATE} 
 
 USER root
 
